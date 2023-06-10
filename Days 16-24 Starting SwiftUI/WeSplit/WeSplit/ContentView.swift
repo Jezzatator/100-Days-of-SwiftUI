@@ -8,38 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+let name = ["Harry", "Hermione", "Ron"]
+    @State private var selectedStudent = "Harry"
+    
     var body: some View {
+        NavigationView {
         Form {
-            Group {
-                Text("coucou louis")
-                Text("Fuck 1312")
-                Text("coucou louis")
-                Text("Fuck 1312")
-                Text("coucou louis")
-                Text("Fuck 1312")
-                Text("coucou louis")
-                Text("Fuck 1312")
-                Text("coucou louis")
-                Text("Fuck 1312")
-            }
-            
-            Section {
-                Text("coucou louis")
-                Text("Fuck 1312")
-            }
-            Section {
-                Text("coucou louis")
-                Text("Fuck 1312")
-                Text("coucou louis")
-                Text("Fuck 1312")
-                Text("coucou louis")
-                Text("Fuck 1312")
-                Text("coucou louis")
-                Text("Fuck 1312")
+            Picker("Select your student", selection: $selectedStudent) {
+                ForEach(name, id: \.self) {
+                    Text($0)
+                }
             }
         }
     }
 }
+
+                     }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
