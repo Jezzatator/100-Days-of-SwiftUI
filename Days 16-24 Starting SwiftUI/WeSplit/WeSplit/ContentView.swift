@@ -14,7 +14,7 @@ struct ContentView: View {
     @State private var tipPercentage = 20
     @FocusState private var amountIsFocused: Bool
     
-    let tipPercentages = [10, 15, 20, 25, 0]
+    let tipPercentages : Int = 0
     
     var  totalPerPerson: Double {
         let peopleCount = Double(numberOfPeople + 2)
@@ -27,11 +27,29 @@ struct ContentView: View {
         return amountPerPerson
     }
     
+    var  grandTotal: Double {
+        let peopleCount = Double(numberOfPeople + 2)
+        let tipSelection = Double(tipPercentage)
+        let tipValue = checkAmount / 100 * tipSelection
+        let grandTotal = checkAmount + tipValue
+        
+        return grandTotal
+    }
+    
+    //bonus challenge
+    
+    var currencyType: FloatingPointFormatStyle<Double>.Currency{
+        var result: FloatingPointFormatStyle<Double>.Currency
+        
+        result = .currency(code: Locale.current.currency?.identifier ?? "EUR")
+        return result
+    }
+    
     var body: some View {
         NavigationView {
             Form {
                 Section {
-                    TextField("Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "EUR"))
+                    TextField("Somme", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "EUR"))
                         .keyboardType(.decimalPad)
                         .focused($amountIsFocused)
                     
@@ -40,22 +58,32 @@ struct ContentView: View {
                             Text("\($0) personnes")
                         }
                     }
+                    .pickerStyle(.navigationLink)
                 }
                 
                 Section {
                     Picker("Pourboire", selection: $tipPercentage) {
-                        ForEach(tipPercentages, id: \.self) {
+                        ForEach(0..<101) {
                             Text($0, format: .percent)
                         }
                     }
-                    .pickerStyle(.segmented)
+                    .pickerStyle(.wheel)
                 } header: {
                     Text("Pourboire?")
                 }
                 
                 Section {
-                    Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "EUR"))
-                }
+                    Text(totalPerPerson, format: currencyType)
+                } header: {
+                Text("Total par personne")
+            }
+                
+                Section {
+                    Text(grandTotal, format: currencyType)
+                } header: {
+                Text("Total avec pourboire")
+            }
+                
             }
             .navigationTitle("WeSplit")
             .toolbar {
